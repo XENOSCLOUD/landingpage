@@ -20,7 +20,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/image1.jpg"
-            alt="XENOS Galaxy Background"
+            alt="XENOS Hero Background"
             fill
             priority
             sizes="100vw"

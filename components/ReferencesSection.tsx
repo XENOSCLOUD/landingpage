@@ -133,23 +133,21 @@ export default function ReferencesSection() {
         </Carousel>
 
         <div className="mt-16 text-center">
-          <h3 className="text-2xl font-bold mb-4">Strategische Partnerschaften</h3>
+          <h3 className="text-2xl font-bold mb-4">Werden Sie Partner</h3>
           <p className="max-w-2xl mx-auto text-muted-foreground mb-8">
-            Wir pflegen strategische Partnerschaften mit führenden Technologieunternehmen wie SAP, Microsoft, Google und AWS, um Ihnen erstklassige Lösungen zu bieten.
+            Wir suchen innovative Partner in verschiedenen Bereichen wie Cloud Computing, KI-Entwicklung, Softwareentwicklung und IT-Consulting. Lassen Sie uns gemeinsam die digitale Zukunft gestalten.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-center">
-            <div className="flex items-center justify-center h-12 bg-transparent">
-              <div className="text-xl font-semibold text-primary/80 hover:text-primary transition-colors">SAP Partner</div>
-            </div>
-            <div className="flex items-center justify-center h-12 bg-transparent">
-              <div className="text-xl font-semibold text-primary/80 hover:text-primary transition-colors">Microsoft Partner</div>
-            </div>
-            <div className="flex items-center justify-center h-12 bg-transparent">
-              <div className="text-xl font-semibold text-primary/80 hover:text-primary transition-colors">Google Cloud Partner</div>
-            </div>
-            <div className="flex items-center justify-center h-12 bg-transparent">
-              <div className="text-xl font-semibold text-primary/80 hover:text-primary transition-colors">AWS Partner</div>
-            </div>
+          <div className="flex justify-center">
+            <a 
+              href="mailto:noah.kellner@xenoscloud.com?subject=Partnerschaftsanfrage%20-%20XENOS%20Cloud&body=Sehr%20geehrter%20Herr%20Kellner%2C%0A%0AIch%20interessiere%20mich%20f%C3%BCr%20eine%20Partnerschaft%20mit%20XENOS%20Cloud.%0A%0AMit%20freundlichen%20Gr%C3%BC%C3%9Fen"
+              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              Partnerschaftsanfrage senden
+            </a>
           </div>
         </div>
       </div>

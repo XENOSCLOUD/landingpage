@@ -1,10 +1,22 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import React, { useState } from "react";
+
+interface SolutionItem {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  status?: string; // Optional status field
+}
 
 export default function SolutionsSection() {
+  const [activeTab, setActiveTab] = useState("saas");
+
   const solutionCategories = [
     {
       id: "saas",
@@ -139,10 +151,28 @@ export default function SolutionsSection() {
           </p>
         </div>
 
-        <Tabs defaultValue="saas" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8 bg-card/70 border border-border/40">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <div className="sm:hidden mb-6">
+            <select 
+              className="w-full p-3 bg-card/70 border border-border/40 rounded-lg text-foreground"
+              value={activeTab}
+              onChange={(e) => setActiveTab(e.target.value)}
+            >
+              {solutionCategories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <TabsList className="hidden sm:inline-flex w-full justify-center gap-2 mb-8">
             {solutionCategories.map((category) => (
-              <TabsTrigger key={category.id} value={category.id} className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsTrigger 
+                key={category.id} 
+                value={category.id} 
+                className="px-6 py-2.5 rounded-lg bg-card/70 border border-border/40 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary hover:bg-card/90 transition-all"
+              >
                 {category.title}
               </TabsTrigger>
             ))}
@@ -150,8 +180,8 @@ export default function SolutionsSection() {
 
           {solutionCategories.map((category) => (
             <TabsContent key={category.id} value={category.id} className="mt-6">
-              <div className="grid md:grid-cols-3 gap-6">
-                {category.items.map((item, idx) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {category.items.map((item: SolutionItem, idx) => (
                   <Card key={idx} className="border border-border/50 bg-card/70 backdrop-blur-sm hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all">
                     <CardHeader>
                       <div className="p-2 w-12 h-12 bg-primary/10 rounded-lg text-primary flex items-center justify-center mb-4">

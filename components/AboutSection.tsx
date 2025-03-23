@@ -136,13 +136,13 @@ export default function AboutSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {coreValues.map((value, index) => (
               <Card key={index} className="bg-card/70 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-colors">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
+                <CardContent className="p-6">
+                  <div className="flex flex-col items-center text-center gap-6 h-full justify-center">
                     <div className="p-2 bg-primary/10 rounded-lg text-primary">
                       {value.icon}
                     </div>
                     <div>
-                      <h4 className="font-bold text-lg mb-2">{value.title}</h4>
+                      <h4 className="font-bold text-lg mb-3">{value.title}</h4>
                       <p className="text-muted-foreground">{value.description}</p>
                     </div>
                   </div>
