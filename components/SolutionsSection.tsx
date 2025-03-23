@@ -130,7 +130,7 @@ export default function SolutionsSection() {
   ];
 
   return (
-    <section id="solutions" className="py-20">
+    <section id="solutions" className="py-20 bg-[#0f1116]">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl font-bold mb-4">Unsere Lösungen</h2>
@@ -140,9 +140,9 @@ export default function SolutionsSection() {
         </div>
 
         <Tabs defaultValue="saas" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-3 mb-8 bg-card/70 border border-border/40">
             {solutionCategories.map((category) => (
-              <TabsTrigger key={category.id} value={category.id}>
+              <TabsTrigger key={category.id} value={category.id} className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 {category.title}
               </TabsTrigger>
             ))}
@@ -152,7 +152,7 @@ export default function SolutionsSection() {
             <TabsContent key={category.id} value={category.id} className="mt-6">
               <div className="grid md:grid-cols-3 gap-6">
                 {category.items.map((item, idx) => (
-                  <Card key={idx} className="border border-border hover:shadow-md transition-shadow">
+                  <Card key={idx} className="border border-border/50 bg-card/70 backdrop-blur-sm hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all">
                     <CardHeader>
                       <div className="p-2 w-12 h-12 bg-primary/10 rounded-lg text-primary flex items-center justify-center mb-4">
                         {item.icon}
@@ -170,7 +170,7 @@ export default function SolutionsSection() {
                       </CardDescription>
                     </CardHeader>
                     <CardFooter>
-                      <Button variant="ghost" size="sm" asChild>
+                      <Button variant="ghost" size="sm" asChild className="text-primary hover:text-primary/80 hover:bg-primary/10">
                         <Link href="#contact">Mehr erfahren</Link>
                       </Button>
                     </CardFooter>
@@ -181,23 +181,23 @@ export default function SolutionsSection() {
           ))}
         </Tabs>
 
-        <div className="mt-16 p-8 bg-secondary/30 rounded-xl">
+        <div className="mt-16 p-8 bg-gradient-to-br from-card/90 to-card/60 rounded-xl border border-border/40 backdrop-blur-sm shadow-xl">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
               <h3 className="text-2xl font-bold mb-4">Maßgeschneiderte Lösungen</h3>
-              <p className="mb-4">
+              <p className="mb-4 text-foreground/90">
                 Unsere Expertise liegt in der Entwicklung maßgeschneiderter Softwarelösungen, die genau auf Ihre Anforderungen zugeschnitten sind. Ob Sie eine komplexe Enterprise-Anwendung, eine innovative SaaS-Lösung oder eine interne Prozessoptimierung benötigen – wir setzen Ihre Vision um.
               </p>
-              <Button asChild>
+              <Button asChild className="bg-primary hover:bg-primary/90">
                 <Link href="#contact">Beratungsgespräch vereinbaren</Link>
               </Button>
             </div>
-            <div className="relative h-64 md:h-auto rounded-lg overflow-hidden">
+            <div className="relative h-64 md:h-auto rounded-xl overflow-hidden border border-border/40 shadow-lg">
               <Image
-                src="/universe1.jpg"
+                src="/universe3.jpg"
                 alt="XENOS Solutions"
                 fill
-                className="object-cover rounded-lg"
+                className="object-cover"
               />
             </div>
           </div>

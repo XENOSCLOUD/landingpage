@@ -5,10 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import Image from "next/image";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -29,6 +30,12 @@ const formSchema = z.object({
 export default function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Vermeidung von Hydration-Fehlern durch clientseitiges Mounting
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,8 +61,21 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-20 bg-white">
-      <div className="container mx-auto px-4">
+    <section id="contact" className="py-20 bg-[#0f1116] relative overflow-hidden">
+      {isMounted && (
+        <div className="absolute inset-0 opacity-20">
+          <Image
+            src="/universe1.jpg"
+            alt="Stars Background"
+            fill
+            priority={false}
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
+      )}
+      
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl font-bold mb-4">Kontakt</h2>
           <p className="text-xl text-muted-foreground">
@@ -64,7 +84,7 @@ export default function ContactSection() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-12">
-          <Card>
+          <Card className="bg-card/80 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle>Kontaktformular</CardTitle>
               <CardDescription>
@@ -85,7 +105,7 @@ export default function ContactSection() {
                     Ihre Nachricht wurde erfolgreich gesendet. Wir werden uns in Kürze bei Ihnen melden.
                   </p>
                   <Button 
-                    className="mt-6" 
+                    className="mt-6 bg-primary hover:bg-primary/90"
                     onClick={() => setIsSuccess(false)}
                   >
                     Neue Nachricht senden
@@ -102,7 +122,7 @@ export default function ContactSection() {
                           <FormItem>
                             <FormLabel>Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Ihr Name" {...field} />
+                              <Input placeholder="Ihr Name" {...field} className="bg-background/50 border-border/50 focus:border-primary/50" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -115,7 +135,7 @@ export default function ContactSection() {
                           <FormItem>
                             <FormLabel>E-Mail</FormLabel>
                             <FormControl>
-                              <Input placeholder="ihre.email@beispiel.de" {...field} />
+                              <Input placeholder="ihre.email@beispiel.de" {...field} className="bg-background/50 border-border/50 focus:border-primary/50" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -130,7 +150,7 @@ export default function ContactSection() {
                         <FormItem>
                           <FormLabel>Telefon (optional)</FormLabel>
                           <FormControl>
-                            <Input placeholder="+49 123 4567890" {...field} />
+                            <Input placeholder="+49 123 4567890" {...field} className="bg-background/50 border-border/50 focus:border-primary/50" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -144,7 +164,7 @@ export default function ContactSection() {
                         <FormItem>
                           <FormLabel>Betreff</FormLabel>
                           <FormControl>
-                            <Input placeholder="Betreff Ihrer Anfrage" {...field} />
+                            <Input placeholder="Betreff Ihrer Anfrage" {...field} className="bg-background/50 border-border/50 focus:border-primary/50" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -160,7 +180,7 @@ export default function ContactSection() {
                           <FormControl>
                             <Textarea 
                               placeholder="Ihre Nachricht an uns" 
-                              className="min-h-32" 
+                              className="min-h-32 bg-background/50 border-border/50 focus:border-primary/50" 
                               {...field} 
                             />
                           </FormControl>
@@ -171,7 +191,7 @@ export default function ContactSection() {
 
                     <Button 
                       type="submit" 
-                      className="w-full" 
+                      className="w-full bg-primary hover:bg-primary/90" 
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? "Wird gesendet..." : "Nachricht senden"}
@@ -241,7 +261,7 @@ export default function ContactSection() {
             
             <div>
               <h3 className="text-2xl font-bold mb-4">Geschäftszeiten</h3>
-              <div className="space-y-2">
+              <div className="space-y-2 text-foreground/90">
                 <div className="flex justify-between">
                   <span>Montag - Freitag:</span>
                   <span>09:00 - 18:00 Uhr</span>
@@ -255,6 +275,19 @@ export default function ContactSection() {
                   <span>Geschlossen</span>
                 </div>
               </div>
+            </div>
+            
+            <div className="pt-6">
+              <Card className="bg-card/70 backdrop-blur-sm border-border/50 p-6">
+                <div className="flex items-center gap-2 text-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg>
+                  <h4 className="font-bold">Schnelle Reaktionszeit</h4>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">Wir antworten in der Regel innerhalb von 24 Stunden auf Ihre Anfragen.</p>
+              </Card>
             </div>
           </div>
         </div>
