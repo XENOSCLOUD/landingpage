@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const roboto = Roboto({
   weight: ['400', '500', '700'],
@@ -34,10 +35,11 @@ export default function RootLayout({
       >
         <Navbar />
         <main>
+          <Analytics />
+          <SpeedInsights />
           {children}
         </main>
         <Footer />
-        <Analytics />
       </body>
     </html>
   );
