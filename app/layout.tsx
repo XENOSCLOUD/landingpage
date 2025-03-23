@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto, Lato } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/react"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const roboto = Roboto({
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+  variable: '--font-roboto',
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const lato = Lato({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  variable: '--font-lato',
 });
 
 export const metadata: Metadata = {
@@ -27,13 +30,14 @@ export default function RootLayout({
   return (
     <html lang="de" className="scroll-smooth dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0f1116] text-foreground`}
+        className={`${roboto.variable} ${lato.variable} antialiased bg-[#0f1116] text-foreground`}
       >
         <Navbar />
         <main>
           {children}
         </main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
