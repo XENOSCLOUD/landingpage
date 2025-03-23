@@ -58,7 +58,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="font-medium text-foreground">Rechtliches</h4>
             <ul className="space-y-2">
-              <li><Link href="#" className="text-foreground/70 hover:text-primary transition-colors">Impressum</Link></li>
+              <li><Link href="/impressum" className="text-foreground/70 hover:text-primary transition-colors">Impressum</Link></li>
               <li><Link href="#" className="text-foreground/70 hover:text-primary transition-colors">Datenschutz</Link></li>
               <li><Link href="#" className="text-foreground/70 hover:text-primary transition-colors">AGB</Link></li>
             </ul>

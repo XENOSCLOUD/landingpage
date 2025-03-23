@@ -10,22 +10,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import Image from "next/image";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
-  name: z.string().min(2, {
+  full_name: z.string().min(2, {
     message: "Der Name muss mindestens 2 Zeichen lang sein.",
+  }),
+  company_name: z.string().min(2, {
+    message: "Der Firmenname muss mindestens 2 Zeichen lang sein.",
   }),
   email: z.string().email({
     message: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
   }),
-  subject: z.string().min(5, {
-    message: "Der Betreff muss mindestens 5 Zeichen lang sein.",
-  }),
-  message: z.string().min(10, {
-    message: "Die Nachricht muss mindestens 10 Zeichen lang sein.",
-  }),
   phone: z.string().optional(),
+  interests: z.string().optional(),
+  notes: z.string().optional(),
 });
+
+const interestOptions = [
+  { value: "ai_saas", label: "AI-gestützte SaaS-Lösungen" },
+  { value: "mvp_development", label: "MVP-Entwicklung & Scale-Up" },
+  { value: "it_services", label: "IT-Dienstleistungen" },
+];
 
 export default function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,24 +46,40 @@ export default function ContactSection() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      full_name: "",
+      company_name: "",
       email: "",
-      subject: "",
-      message: "",
       phone: "",
+      interests: "",
+      notes: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      console.log(values);
-      setIsSubmitting(false);
+    try {
+      const response = await fetch('https://n8n.xenoscloud.com/webhook/404e9286-1793-4de2-9b3a-d5605acdf3d5', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth_key': 'Cek77uzodQynabCvu6kkfrnzzsI02fOURw00yEozhJ0='
+        },
+        body: JSON.stringify(values)
+      });
+
+      if (!response.ok) {
+        throw new Error('Fehler beim Senden der Nachricht');
+      }
+
       setIsSuccess(true);
       form.reset();
-    }, 1500);
+    } catch (error) {
+      console.error('Fehler:', error);
+      // Hier könnte man einen Fehlerstatus hinzufügen
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -117,7 +139,7 @@ export default function ContactSection() {
                     <div className="grid md:grid-cols-2 gap-4">
                       <FormField
                         control={form.control}
-                        name="name"
+                        name="full_name"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Name</FormLabel>
@@ -130,18 +152,32 @@ export default function ContactSection() {
                       />
                       <FormField
                         control={form.control}
-                        name="email"
+                        name="company_name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>E-Mail</FormLabel>
+                            <FormLabel>Firma</FormLabel>
                             <FormControl>
-                              <Input placeholder="ihre.email@beispiel.de" {...field} className="bg-background/50 border-border/50 focus:border-primary/50" />
+                              <Input placeholder="Name Ihrer Firma" {...field} className="bg-background/50 border-border/50 focus:border-primary/50" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
+
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>E-Mail</FormLabel>
+                          <FormControl>
+                            <Input placeholder="ihre.email@beispiel.de" {...field} className="bg-background/50 border-border/50 focus:border-primary/50" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
                     <FormField
                       control={form.control}
@@ -159,13 +195,24 @@ export default function ContactSection() {
 
                     <FormField
                       control={form.control}
-                      name="subject"
+                      name="interests"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Betreff</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Betreff Ihrer Anfrage" {...field} className="bg-background/50 border-border/50 focus:border-primary/50" />
-                          </FormControl>
+                          <FormLabel>Interessengebiet (optional)</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="bg-background/50 border-border/50 focus:border-primary/50">
+                                <SelectValue placeholder="Wählen Sie ein Interessengebiet" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {interestOptions.map((option) => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -173,10 +220,10 @@ export default function ContactSection() {
 
                     <FormField
                       control={form.control}
-                      name="message"
+                      name="notes"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nachricht</FormLabel>
+                          <FormLabel>Nachricht (optional)</FormLabel>
                           <FormControl>
                             <Textarea 
                               placeholder="Ihre Nachricht an uns" 
@@ -206,7 +253,7 @@ export default function ContactSection() {
             <div>
               <h3 className="text-2xl font-bold mb-4">Kontaktinformationen</h3>
               <p className="text-muted-foreground mb-6">
-                Sie können uns auch direkt per E-Mail oder Telefon kontaktieren. Wir freuen uns auf Ihre Anfrage.
+                Kontaktieren Sie uns direkt - wir freuen uns auf Ihre Anfrage und stehen Ihnen gerne zur Verfügung.
               </p>
               
               <div className="space-y-4">
@@ -219,8 +266,8 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <p className="font-bold">E-Mail</p>
-                    <a href="mailto:info@xenoscloud.com" className="text-primary hover:underline">
-                      info@xenoscloud.com
+                    <a href="mailto:noah.kellner@xenoscloud.com" className="text-primary hover:underline">
+                      noah.kellner@xenoscloud.com
                     </a>
                   </div>
                 </div>
@@ -233,50 +280,37 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <p className="font-bold">Telefon</p>
-                    <a href="tel:+4912345678900" className="text-primary hover:underline">
-                      +49 123 456 789 00
+                    <a href="tel:+4915128768606" className="text-primary hover:underline">
+                      +49 151 28768606
                     </a>
                   </div>
                 </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-bold">Adresse</p>
-                    <address className="not-italic text-muted-foreground">
-                      XENOS GmbH<br />
-                      Innovationsstraße 42<br />
-                      10115 Berlin<br />
-                      Deutschland
-                    </address>
-                  </div>
-                </div>
               </div>
             </div>
             
-            <div>
-              <h3 className="text-2xl font-bold mb-4">Geschäftszeiten</h3>
-              <div className="space-y-2 text-foreground/90">
-                <div className="flex justify-between">
-                  <span>Montag - Freitag:</span>
-                  <span>09:00 - 18:00 Uhr</span>
+            <div className="grid grid-cols-2 gap-4">
+              <Card className="bg-card/70 backdrop-blur-sm border-border/50 p-6">
+                <div className="flex items-center gap-2 text-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2v20M2 12h20" />
+                    <circle cx="12" cy="12" r="10" />
+                  </svg>
+                  <h4 className="font-bold">Agile Entwicklung</h4>
                 </div>
-                <div className="flex justify-between">
-                  <span>Samstag:</span>
-                  <span>Nach Vereinbarung</span>
+                <p className="mt-2 text-sm text-muted-foreground">Schnelle und flexible Lösungen für Ihre individuellen Anforderungen.</p>
+              </Card>
+
+              <Card className="bg-card/70 backdrop-blur-sm border-border/50 p-6">
+                <div className="flex items-center gap-2 text-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                  </svg>
+                  <h4 className="font-bold">AI-Expertise</h4>
                 </div>
-                <div className="flex justify-between">
-                  <span>Sonntag:</span>
-                  <span>Geschlossen</span>
-                </div>
-              </div>
+                <p className="mt-2 text-sm text-muted-foreground">Innovative KI-Lösungen für zukunftsweisende Projekte.</p>
+              </Card>
             </div>
-            
+
             <div className="pt-6">
               <Card className="bg-card/70 backdrop-blur-sm border-border/50 p-6">
                 <div className="flex items-center gap-2 text-primary">
